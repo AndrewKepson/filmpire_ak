@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import {
 	AppBar,
 	IconButton,
@@ -14,19 +14,49 @@ import {
 	Brightness4,
 	Brightness7
 } from '@mui/icons-material'
-import { useTheme } from '@mui/styles'
 import { Link } from 'react-router-dom'
 
+import { useTheme } from '@mui/styles'
+import { useDispatch, useSelector } from 'react-redux'
 import useStyles from './styles'
+import { createSessionId, fetchToken, moviesApi } from '../../utils'
+import { setUser, userSelector } from '../../features/auth'
 
 import { Sidebar, Search } from '..'
 
 const NavBar = () => {
+	const { isAuthenticated, user } = useSelector(userSelector)
 	const [mobileOpen, setMobileOpen] = useState(false)
 	const classes = useStyles()
 	const isMobile = useMediaQuery('(max-width:600px')
 	const theme = useTheme()
-	const isAuthenticated = true
+	const dispatch = useDispatch()
+	const token = localStorage.getItem('request_token')
+	const sessionIdFromLocalStorage = localStorage.getItem('session_id')
+
+	useEffect(() => {
+		const logInUser = async () => {
+			if (token) {
+				if (sessionIdFromLocalStorage) {
+					const { data: userData } = await moviesApi.get(
+						`/account?session_id=${sessionIdFromLocalStorage}`
+					)
+
+					dispatch(setUser(userData))
+				} else {
+					const sessionId = await createSessionId()
+
+					const { data: userData } = await moviesApi.get(
+						`/account?session_id=${sessionId}`
+					)
+
+					dispatch(setUser(userData))
+				}
+			}
+		}
+
+		logInUser()
+	}, [token])
 
 	return (
 		<>
@@ -48,14 +78,14 @@ const NavBar = () => {
 					{!isMobile && <Search />}
 					<div>
 						{!isAuthenticated ? (
-							<Button color='inherit' onClick={() => {}}>
+							<Button color='inherit' onClick={fetchToken}>
 								Login &nbsp; <AccountCircle />
 							</Button>
 						) : (
 							<Button
 								color='inherit'
 								component={Link}
-								to={`/profile/:id`}
+								to={`/profile/${user.id}`}
 								className={classes.linkButton}
 								onClick={() => {}}>
 								{!isMobile && <>My Movies &nbsp; </>}
