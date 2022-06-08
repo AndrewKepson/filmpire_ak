@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import {
 	Modal,
 	Typography,
@@ -16,7 +16,6 @@ import {
 	Theaters,
 	Language,
 	PlusOne,
-	Favorie,
 	FavoriteBorderOutlined,
 	Remove,
 	ArrowBack,
@@ -28,14 +27,22 @@ import { useDispatch, useSelector } from 'react-redux'
 import useStyles from './styles'
 import axios from 'axios'
 
-import { useGetMovieQuery } from '../../services/TMDB'
+import {
+	useGetMovieQuery,
+	useGetRecommendationsQuery
+} from '../../services/TMDB'
 import { selectGenreOrCategory } from '../../features/currentGenreOrCategory'
 
+import { MovieList } from '..'
+
 const MovieInformation = () => {
+	const [open, setOpen] = useState(false)
 	const classes = useStyles()
 	const { id } = useParams()
 	const { data, isFetching, error } = useGetMovieQuery(id)
 	const dispatch = useDispatch()
+	const { data: recommendations, isFetching: isRecommendationsFetching } =
+		useGetRecommendationsQuery({ list: '/recommendations', movie_id: id })
 
 	const isMovieFavorited = true
 	const isMovieWatchlisted = true
@@ -164,7 +171,10 @@ const MovieInformation = () => {
 									endIcon={<MovieIcon />}>
 									IMDB
 								</Button>
-								<Button onClick={() => {}} href='#' endIcon={<Theaters />}>
+								<Button
+									onClick={() => setOpen(true)}
+									href='#'
+									endIcon={<Theaters />}>
 									Trailer
 								</Button>
 							</ButtonGroup>
@@ -200,6 +210,32 @@ const MovieInformation = () => {
 					</div>
 				</Grid>
 			</Grid>
+			<Box marginTop='5rem' width='100%'>
+				<Typography variant='h3' gutterBottom align='center'>
+					You might also like:
+				</Typography>
+				{recommendations ? (
+					<MovieList movies={recommendations} numberOfMovies={12} />
+				) : (
+					<Box>Sorry, nothing was found.</Box>
+				)}
+			</Box>
+			<Modal
+				closeAfterTransition
+				className={classes.modal}
+				open={open}
+				onClose={() => setOpen(false)}>
+				{data?.videos?.results?.length > 0 && (
+					<iframe
+						autoPlay
+						className={classes.video}
+						frameBorder='0'
+						title='Trailer'
+						src={`https://www.youtube.com/embed/${data.videos.results[0].key}`}
+						allow='autoplay'
+					/>
+				)}
+			</Modal>
 		</Grid>
 	)
 }

@@ -2,13 +2,15 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 
 const tmdbApiKey = process.env.REACT_APP_TMDB_KEY
 const page = 1
-// /movie/popular?api_key=<<api_key>>&language=en-US&page=1
 
+// * Create an API to interact with TMDB by defining endpoints which will be available to us in Redux
 export const tmdbApi = createApi({
 	reducerPath: 'tmdbApi',
+	// * Set the base query for all the requests in this API
 	baseQuery: fetchBaseQuery({
 		baseUrl: 'https://api.themoviedb.org/3'
 	}),
+	// * Define API endpoints
 	endpoints: builder => ({
 		// * Get Genres
 		getGenres: builder.query({
@@ -47,9 +49,32 @@ export const tmdbApi = createApi({
 		getMovie: builder.query({
 			query: id =>
 				`/movie/${id}?append_to_response=videos,credits&api_key=${tmdbApiKey}`
+		}),
+
+		// * Get User-Specific Lists
+		getRecommendations: builder.query({
+			query: ({ movie_id, list }) =>
+				`/movie/${movie_id}/${list}?api_key=${tmdbApiKey}`
+		}),
+
+		// * Get Actor by ID
+		getActorsDetails: builder.query({
+			query: person_id => `/person/${person_id}?api_key=${tmdbApiKey}`
+		}),
+
+		getMoviesByActorId: builder.query({
+			query: (id, page) =>
+				`/discover/movie?with_cast=${id}&page=${page}&api_key=${tmdbApiKey}`
 		})
 	})
 })
 
-export const { useGetMoviesQuery, useGetGenresQuery, useGetMovieQuery } =
-	tmdbApi
+// * Export APIs as hooks to access their data from components
+export const {
+	useGetMoviesQuery,
+	useGetGenresQuery,
+	useGetMovieQuery,
+	useGetRecommendationsQuery,
+	useGetActorsDetailsQuery,
+	useGetMoviesByActorIdQuery
+} = tmdbApi
