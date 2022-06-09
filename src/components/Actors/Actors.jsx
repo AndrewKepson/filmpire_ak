@@ -9,10 +9,10 @@ import {
 } from '../../services/TMDB'
 import useStyles from './styles'
 
-import { MovieList } from '..'
+import { MovieList, Pagination } from '..'
 
 const Actors = () => {
-	const page = 1
+	const [page, setPage] = useState(1)
 	const { id } = useParams()
 	const history = useHistory()
 	const { data: actorDetails, isFetching, error } = useGetActorsDetailsQuery(id)
@@ -89,6 +89,11 @@ const Actors = () => {
 				{moviesByActor && (
 					<MovieList movies={moviesByActor} numberOfMovies={12} />
 				)}
+				<Pagination
+					currentPage={page}
+					setPage={setPage}
+					totalPages={moviesByActor?.total_pages}
+				/>
 			</Box>
 		</>
 	)
