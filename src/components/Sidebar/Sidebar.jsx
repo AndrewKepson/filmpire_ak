@@ -58,7 +58,7 @@ function Sidebar({ setMobileOpen }) {
               <ListItemIcon>
                 <img
                   src={genreIcons[label.toLowerCase()]}
-                  className={classes.genreImages}
+                  className={classes.genreImage}
                   height={30}
                   alt='category logo'
                 />
@@ -81,7 +81,7 @@ function Sidebar({ setMobileOpen }) {
                 <ListItemIcon>
                   <img
                     src={genreIcons[name.toLowerCase()]}
-                    className={classes.genreImages}
+                    className={classes.genreImage}
                     height={30}
                     alt='category logo'
                   />
