@@ -13,16 +13,15 @@ export default makeStyles(theme => ({
 	poster: {
 		borderRadius: '20px',
 		boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
-		width: '80%',
+		width: '100%',
 		[theme.breakpoints.down('md')]: {
 			margin: '0 auto',
-			width: '50%',
-			height: '350px'
+			width: '50%'
 		},
 		[theme.breakpoints.down('sm')]: {
 			margin: '0 auto',
 			width: '100%',
-			height: '350px',
+			height: '300px',
 			marginBottom: '30px'
 		}
 	},
@@ -66,8 +65,8 @@ export default makeStyles(theme => ({
 		justifyContent: 'center'
 	},
 	video: {
-		width: '50%',
-		height: '50%',
+		width: '80%',
+		height: '80%',
 		[theme.breakpoints.down('sm')]: {
 			width: '90%',
 			height: '90%'

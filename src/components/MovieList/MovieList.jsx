@@ -5,7 +5,7 @@ import useStyles from './styles'
 
 import { Movie } from '..'
 
-const MovieList = ({ movies, numberOfMovies }) => {
+function MovieList({ movies, numberOfMovies }) {
 	const classes = useStyles()
 
 	return (
