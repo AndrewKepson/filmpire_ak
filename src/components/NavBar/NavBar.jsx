@@ -30,7 +30,7 @@ function NavBar() {
   const [mobileOpen, setMobileOpen] = useState(false)
 
   const classes = useStyles()
-  const isMobile = useMediaQuery('(max-width:600px')
+  const isMobile = useMediaQuery('(max-width:600px)')
   const theme = useTheme()
   const colorMode = useContext(ColorModeContext)
   const dispatch = useDispatch()
