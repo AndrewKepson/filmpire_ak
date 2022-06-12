@@ -98,7 +98,7 @@ function NavBar() {
                 <Avatar
                   style={{ width: 30, height: 30 }}
                   alt='Profile'
-                  src='https://cdn5.vectorstock.com/i/1000x1000/66/14/default-avatar-photo-placeholder-profile-picture-vector-21806614.jpg'
+                  src={`https://www.themoviedeb.org/t/p/wb6_and_h64_face${user?.avatar?.tmdb?.avater_path}`}
                 />
               </Button>
             )}
